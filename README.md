@@ -1,5 +1,6 @@
 # Assignment: Steps for Installing and Instantiating Chaincode on Hyperledger Fabric 2.2
 
+___
 
 ## 1. Commands for Installing and Running Hyperledger Fabric
 
@@ -73,9 +74,7 @@ peer chaincode query -C mychannel -n basic -c '{"Args":["GetAllAssets"]}'
 ```bash
 ./network.sh down
 ```
-
-
-
+___
 
 ## 2. Explain Cryptogen and Configtxgen
 
@@ -98,9 +97,7 @@ peer chaincode query -C mychannel -n basic -c '{"Args":["GetAllAssets"]}'
 #### Generates the genesis block for the ordering service.
 #### Creates channel configuration transactions and anchor peer updates.
 
-
-
-
+___
 
 ## 3.Develop a chaincode for storing the data in to blockchain
 
