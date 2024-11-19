@@ -1,0 +1,190 @@
+{
+    "name": "my-network",
+    "version": "1.0.0",
+    "client": {
+      "organization": "Org1",
+      "connection": {
+        "timeout": {
+          "peer": {
+            "endorse": "300",
+            "connect": "300"
+          }
+        }
+      }
+    },
+    "channels": {
+      "mychannel": {
+        "peers": {
+          "peer0.org1.example.com": {}
+        }
+      }
+    },
+    "organizations": {
+      "OrdererOrg": {
+        "mspid": "OrdererMSP",
+        "peers": [
+          "orderer.harvest2home.com"
+        ],
+        "certificateAuthorities": [
+          "ca.orderer.harvest2home.com"
+        ]
+      },
+      "Farmer": {
+        "mspid": "FarmerMSP",
+        "peers": [
+          "peer0.farmer.harvest2home.com"
+        ],
+        "certificateAuthorities": [
+          "ca.farmer.harvest2home.com"
+        ]
+      },
+      "DeliveryPartner": {
+        "mspid": "DeliverypartnerMSP",
+        "peers": [
+          "peer0.delivery-partner.harvest2home.com"
+        ],
+        "certificateAuthorities": [
+          "ca.delivery-partner.harvest2home.com"
+        ]
+      },
+      "ConsumersAssociation": {
+        "mspid": "ConsumersAssociationMSP",
+        "peers": [
+          "peer0.consumer-association.harvest2home.com"
+        ],
+        "certificateAuthorities": [
+          "ca.consumer-association.harvest2home.com"
+        ]
+      },
+      "QualityAssuranceAgency": {
+        "mspid": "QualityAssuranceAgencyMSP",
+        "peers": [
+          "peer0.quality-assurance-agency.harvest2home.com"
+        ],
+        "certificateAuthorities": [
+          "ca.quality-assurance-agency.harvest2home.com"
+        ]
+      }
+    },
+    "peers": {
+      "peer0.org1.example.com": {
+        "url": "grpcs://localhost:7051",
+        "tlsCACerts": {
+          "pem": "-----BEGIN CERTIFICATE-----\n...your cert...\n-----END CERTIFICATE-----\n"
+        },
+        "grpcOptions": {
+          "ssl-target-name-override": "peer0.org1.example.com"
+        }
+      },
+      "peer0.farmer.harvest2home.com": {
+        "url": "grpcs://localhost:8051",
+        "tlsCACerts": {
+          "pem": "-----BEGIN CERTIFICATE-----\n...farmer cert...\n-----END CERTIFICATE-----\n"
+        },
+        "grpcOptions": {
+          "ssl-target-name-override": "peer0.farmer.harvest2home.com"
+        }
+      },
+      "peer0.delivery-partner.harvest2home.com": {
+        "url": "grpcs://localhost:9051",
+        "tlsCACerts": {
+          "pem": "-----BEGIN CERTIFICATE-----\n...delivery partner cert...\n-----END CERTIFICATE-----\n"
+        },
+        "grpcOptions": {
+          "ssl-target-name-override": "peer0.delivery-partner.harvest2home.com"
+        }
+      },
+      "peer0.consumer-association.harvest2home.com": {
+        "url": "grpcs://localhost:10051",
+        "tlsCACerts": {
+          "pem": "-----BEGIN CERTIFICATE-----\n...consumer association cert...\n-----END CERTIFICATE-----\n"
+        },
+        "grpcOptions": {
+          "ssl-target-name-override": "peer0.consumer-association.harvest2home.com"
+        }
+      },
+      "peer0.quality-assurance-agency.harvest2home.com": {
+        "url": "grpcs://localhost:11051",
+        "tlsCACerts": {
+          "pem": "-----BEGIN CERTIFICATE-----\n...quality assurance agency cert...\n-----END CERTIFICATE-----\n"
+        },
+        "grpcOptions": {
+          "ssl-target-name-override": "peer0.quality-assurance-agency.harvest2home.com"
+        }
+      }
+    },
+    "capabilities": {
+      "channel": {
+        "V2_0": true
+      },
+      "orderer": {
+        "V2_0": true
+      },
+      "application": {
+        "V2_5": true
+      }
+    },
+    "application": {
+      "organizations": [
+        "Farmer",
+        "DeliveryPartner",
+        "ConsumersAssociation",
+        "QualityAssuranceAgency"
+      ],
+      "policies": {
+        "Readers": {
+          "type": "ImplicitMeta",
+          "rule": "ANY Readers"
+        },
+        "Writers": {
+          "type": "ImplicitMeta",
+          "rule": "ANY Writers"
+        },
+        "Admins": {
+          "type": "ImplicitMeta",
+          "rule": "MAJORITY Admins"
+        },
+        "LifecycleEndorsement": {
+          "type": "ImplicitMeta",
+          "rule": "MAJORITY Endorsement"
+        },
+        "Endorsement": {
+          "type": "ImplicitMeta",
+          "rule": "MAJORITY Endorsement"
+        }
+      },
+      "capabilities": {
+        "V2_5": true
+      }
+    },
+    "orderer": {
+      "addresses": [
+        "orderer.harvest2home.com:7050"
+      ],
+      "batchTimeout": "2s",
+      "batchSize": {
+        "maxMessageCount": 10,
+        "absoluteMaxBytes": "99 MB",
+        "preferredMaxBytes": "512 KB"
+      },
+      "policies": {
+        "Readers": {
+          "type": "ImplicitMeta",
+          "rule": "ANY Readers"
+        },
+        "Writers": {
+          "type": "ImplicitMeta",
+          "rule": "ANY Writers"
+        },
+        "Admins": {
+          "type": "ImplicitMeta",
+          "rule": "MAJORITY Admins"
+        },
+        "BlockValidation": {
+          "type": "ImplicitMeta",
+          "rule": "ANY Writers"
+        }
+      }
+    }
+  }
+  

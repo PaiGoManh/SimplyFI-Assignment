@@ -1,0 +1,175 @@
+Organizations:
+  - &OrdererOrg
+    Name: OrdererOrg
+    ID: OrdererMSP
+    MSPDir: ../organizations/ordererOrganizations/harvest2home.com/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('OrdererMSP.member')"
+      Writers:
+        Type: Signature
+        Rule: "OR('OrdererMSP.member')"
+      Admins:
+        Type: Signature
+        Rule: "OR('OrdererMSP.admin')"
+    OrdererEndpoints:
+      - orderer.harvest2home.com:7050
+  - &Farmer
+    Name: FarmerMSP
+    ID: FarmerMSP
+    MSPDir: ../organizations/peerOrganizations/farmer.harvest2home.com/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('FarmerMSP.admin', 'FarmerMSP.peer', 'FarmerMSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('FarmerMSP.admin', 'FarmerMSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('FarmerMSP.admin')"
+      Endorsement:
+        Type: Signature
+        Rule: "OR('FarmerMSP.peer')"
+  - &DeliveryPartner
+    Name: DeliverypartnerMSP
+    ID: DeliverypartnerMSP
+    MSPDir: ../organizations/peerOrganizations/delivery-partner.harvest2home.com/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('DeliverypartnerMSP.admin', 'DeliverypartnerMSP.peer', 'DeliverypartnerMSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('DeliverypartnerMSP.admin', 'DeliverypartnerMSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('DeliverypartnerMSP.admin')"
+      Endorsement:
+        Type: Signature
+        Rule: "OR('DeliverypartnerMSP.peer')"
+  - &ConsumersAssociation
+    Name: ConsumersAssociationMSP
+    ID: ConsumersAssociationMSP
+    MSPDir: ../organizations/peerOrganizations/consumer-association.harvest2home.com/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('ConsumersAssociationMSP.admin', 'ConsumersAssociationMSP.peer', 'ConsumersAssociationMSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('ConsumersAssociationMSP.admin', 'ConsumersAssociationMSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('ConsumersAssociationMSP.admin')"
+      Endorsement:
+        Type: Signature
+        Rule: "OR('ConsumersAssociationMSP.peer')"
+  - &QualityAssuranceAgency 
+    Name: QualityAssuranceAgencyMSP
+    ID: QualityAssuranceAgencyMSP
+    MSPDir: ../organizations/peerOrganizations/quality-assurance-agency.harvest2home.com/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('QualityAssuranceAgencyMSP.admin', 'QualityAssuranceAgencyMSP.peer', 'QualityAssuranceAgencyMSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('QualityAssuranceAgencyMSP.admin', 'QualityAssuranceAgencyMSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('QualityAssuranceAgencyMSP.admin')"
+      Endorsement:
+        Type: Signature
+        Rule: "OR('QualityAssuranceAgencyMSP.peer')"
+
+Capabilities:  
+  Channel: &ChannelCapabilities
+    V2_0: true
+  Orderer: &OrdererCapabilities
+    V2_0: true
+  Application: &ApplicationCapabilities
+    V2_5: true
+
+Application: &ApplicationDefaults
+  Organizations:
+  Policies:
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    Admins:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Admins"
+    LifecycleEndorsement:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Endorsement"
+    Endorsement:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Endorsement"
+  Capabilities:
+    <<: *ApplicationCapabilities
+
+Orderer: &OrdererDefaults
+  Addresses:
+    - orderer.harvest2home.com:7050
+  BatchTimeout: 2s
+  BatchSize:
+    MaxMessageCount: 10
+    AbsoluteMaxBytes: 99 MB
+    PreferredMaxBytes: 512 KB
+  Organizations:
+  Policies:
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    Admins:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Admins"
+    BlockValidation:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+
+Channel: &ChannelDefaults
+  Policies:
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    Admins:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Admins"
+  Capabilities:
+    <<: *ChannelCapabilities
+
+Profiles:
+  ThreeOrgsChannel:
+    <<: *ChannelDefaults
+    Orderer:
+      <<: *OrdererDefaults
+      OrdererType: etcdraft
+      EtcdRaft:
+        Consenters:
+          - Host: orderer.harvest2home.com
+            Port: 7050
+            ClientTLSCert: ../organizations/ordererOrganizations/harvest2home.com/orderers/orderer.harvest2home.com/tls/server.crt
+            ServerTLSCert: ../organizations/ordererOrganizations/harvest2home.com/orderers/orderer.harvest2home.com/tls/server.crt
+      Organizations:
+        - *OrdererOrg
+      Capabilities: *OrdererCapabilities
+    Application:
+      <<: *ApplicationDefaults
+      Organizations:
+        - *Farmer
+        - *DeliveryPartner
+        - *ConsumersAssociation
+        - *QualityAssuranceAgency
+      Capabilities: *ApplicationCapabilities

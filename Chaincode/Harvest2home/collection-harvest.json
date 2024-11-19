@@ -1,0 +1,11 @@
+[
+    {
+      "name": "FeedbackCollection",
+      "policy": "OR('ConsumersAssociationMSP.member', 'QualityAssuranceAgencyMSP.member')",
+      "requiredPeerCount": 1,
+      "maxPeerCount": 1,
+      "blockToLive": 100,
+      "memberOnlyRead": true
+    }
+  ]
+  
