@@ -12,6 +12,8 @@ export CONSUMERASSOCIATION_PEER_TLSROOTCERT=${PWD}/organizations/peerOrganizatio
 export QUALITYASSURANCE_PEER_TLSROOTCERT=${PWD}/organizations/peerOrganizations/quality-assurance-agency.harvest2home.com/peers/peer0.quality-assurance-agency.harvest2home.com/tls/ca.crt
 
 # i set the product id as the transaction id of that product invoke function so copy that product id from invoked list 
+# const productId = ctx.stub.getTxID(); // in chaincode 
+# enter your productid from invoke succesfull of addproducts
 
-peer chaincode query -C $CHANNEL_NAME -n Harvest2home -c '{"function":"getHistory","Args":["e42d953beeb38bcb7c650adcc9cf30d859e076ff0222d2cd64c69cef9c146d2e"]}'
+peer chaincode query -C $CHANNEL_NAME -n Harvest2home -c '{"function":"getHistory","Args":["productId"]}'
 

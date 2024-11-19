@@ -11,4 +11,5 @@ export DELIVERYPARTNER_PEER_TLSROOTCERT=${PWD}/organizations/peerOrganizations/d
 export CONSUMERASSOCIATION_PEER_TLSROOTCERT=${PWD}/organizations/peerOrganizations/consumer-association.harvest2home.com/peers/peer0.consumer-association.harvest2home.com/tls/ca.crt
 export QUALITYASSURANCE_PEER_TLSROOTCERT=${PWD}/organizations/peerOrganizations/quality-assurance-agency.harvest2home.com/peers/peer0.quality-assurance-agency.harvest2home.com/tls/ca.crt
 
+# you can set the JSON query string to filter documents based on fields like im using status:approved products
 peer chaincode query -C $CHANNEL_NAME -n Harvest2home -c '{"function":"GetByNonPrimaryKey","Args":["{\"selector\":{\"docType\":\"product\",\"status\":\"Approved\"}}"]}'
